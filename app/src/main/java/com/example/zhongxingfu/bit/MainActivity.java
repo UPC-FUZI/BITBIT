@@ -1,8 +1,13 @@
 package com.example.zhongxingfu.bit;
 
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +19,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+        implements NavigationView.OnNavigationItemSelectedListener,SensorEventListener {
+    private SensorManager sensorManager;
+    private Sensor sensor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);//初始化
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        sensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
+        sensor=sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        Log.w("heihei","haha");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,5 +106,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    @Override
+    public void onAccuracyChanged(Sensor sensor,int accuracy){
+        Log.w("woqu","enen");
+    }
+    @Override
+    public void onSensorChanged(SensorEvent event){
+        if(event.sensor.getType()==Sensor.TYPE_GYROSCOPE){
+            Log.w("陀螺仪","X:"+event.values[0]+"Y:"+event.values[1]+"Z:"+event.values[2]);
+        }
     }
 }
